@@ -17,7 +17,7 @@ main:
 .addVec2:
     vsetvli     a4, a0, e32, m2 # a4: VL ; a0 = N = ALV; sew = 32; lmul = 2 => a4 = min(vlmax, a0)
     vle32.v     v2, (a0)        # v2-v3 <- x[0]-x[7]
-    vmsne.vi    v0, v8, 0       # create mask (1 if x[i] != 0)
+    vmsne.vi    v0, v2, 0       # create mask (1 if x[i] != 0)
     vle32.v     v4, (a1), v0.t  # masked v4-v5 <- a[0]-a[7]
     vle32.v     v6, (a2), v0.t  # masked v6-v7 <- b[0]-b[7]
     sub         a0, a0, a4      # a0 = a0 - a4 => a0 = AVL - VL : 1era iter : 10 - 8
