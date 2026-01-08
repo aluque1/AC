@@ -16,10 +16,10 @@ main:
 
 .addVec2:
     vsetvli     a4, a0, e32, m2 # a4: VL ; a0 = N = ALV; sew = 32; lmul = 2 => a4 = min(vlmax, a0)
-    vle32.v     v2, (a0)        # v2-v3 <- x[0]-x[7]
+    vle32.v     v2, (a1)        # v2-v3 <- x[0]-x[7]
     vmsne.vi    v0, v2, 0       # create mask (1 if x[i] != 0)
-    vle32.v     v4, (a1), v0.t  # masked v4-v5 <- a[0]-a[7]
-    vle32.v     v6, (a2), v0.t  # masked v6-v7 <- b[0]-b[7]
+    vle32.v     v4, (a2), v0.t  # masked v4-v5 <- a[0]-a[7]
+    vle32.v     v6, (a3), v0.t  # masked v6-v7 <- b[0]-b[7]
     sub         a0, a0, a4      # a0 = a0 - a4 => a0 = AVL - VL : 1era iter : 10 - 8
     slli        a4, a4, 2       # a4 = a4 << 2 = a4 = a4 * 4    : 1era iter : 8 * 4 = 32
                                 # ver explicacion ej2.s
@@ -30,5 +30,5 @@ main:
     vse32.v     v3, (a3), v0.t  # masked *c[0] <- v3-v4 => 
                                 # guardamos en c[0]-c[7] <- a[0]-a[7] + b[0]-b[7]
     add         a4, a4, a4      # a3 = *c[0] + 32 => a3 = *c[8]
-    bnez        a0, .addVec     # branch to .addVec if a0 != 0
+    bnez        a0, .addVec2     # branch to .addVec if a0 != 0
 
